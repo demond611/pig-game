@@ -12,7 +12,7 @@ EXTRAS
 
 */
 
-var scores, roundScore, activePlayer, isGamePlaying;
+var scores, roundScore, activePlayer, isGamePlaying, previousRoll;
 
 newGame();
 
@@ -20,22 +20,25 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
     
     if (isGamePlaying) {
         var currentRoll = Math.floor(Math.random() * 6) + 1,
-            diceDOM = document.querySelector('.dice'),
-            previousRoll = [];
+            diceDOM = document.querySelector('.dice');
         
-        previousRoll.push(currentRoll);
-        console.log(previousRoll);
 
         document.querySelector('.dice').style.display = 'block';
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + currentRoll + '.png';
-
-        if (currentRoll !== 1) {
+        
+        if (currentRoll === 6 && previousRoll === 6) {
+            scores[activePlayer] = 0;
+            document.getElementById('score-' + activePlayer).textContent = '0';
+            nextPlayer();
+        } else if (currentRoll !== 1) {
             roundScore += currentRoll;
             document.getElementById('current-' + activePlayer).textContent = roundScore;
         } else {
             nextPlayer();
         }
+        
+        previousRoll = currentRoll;
     }
     
 });
