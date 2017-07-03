@@ -9,10 +9,10 @@ GAME RULES:
 
 EXTRAS
 -Player loses entire score if they roll two 6's in a row
-
+-Second dice added. If either/or dice is a 1 the all the ROUND score gets lost
 */
 
-var scores, roundScore, activePlayer, isGamePlaying, previousRoll;
+var scores, roundScore, activePlayer, isGamePlaying, previousRoll, previousRoll_2;
 
 newGame();
 
@@ -20,25 +20,33 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
     
     if (isGamePlaying) {
         var currentRoll = Math.floor(Math.random() * 6) + 1,
-            diceDOM = document.querySelector('.dice');
+            currentRoll_2 = Math.floor(Math.random() * 6) + 1,
+            diceDOM = document.querySelector('.dice'),
+            diceDOM_2 = document.querySelector('.dice-2');
         
 
         document.querySelector('.dice').style.display = 'block';
         diceDOM.style.display = 'block';
         diceDOM.src = 'dice-' + currentRoll + '.png';
         
-        if (currentRoll === 6 && previousRoll === 6) {
+        document.querySelector('.dice-2').style.display = 'block';
+        diceDOM_2.style.display = 'block';
+        diceDOM_2.src = 'dice-' + currentRoll_2 + '.png';
+        
+        if ((currentRoll === 6 && previousRoll === 6) ||
+            (currentRoll_2 === 6 && previousRoll_2 === 6)) {
             scores[activePlayer] = 0;
             document.getElementById('score-' + activePlayer).textContent = '0';
             nextPlayer();
-        } else if (currentRoll !== 1) {
-            roundScore += currentRoll;
+        } else if (currentRoll !== 1 && currentRoll_2 !== 1) {
+            roundScore = roundScore + currentRoll + currentRoll_2;
             document.getElementById('current-' + activePlayer).textContent = roundScore;
         } else {
             nextPlayer();
         }
         
         previousRoll = currentRoll;
+        previousRoll_2 = currentRoll_2;
     }
     
 });
@@ -77,6 +85,7 @@ function nextPlayer() {
 
     setTimeout(function () {
         document.querySelector('.dice').style.display = 'none';
+        document.querySelector('.dice-2').style.display = 'none';
     }, 500);
 }
 
@@ -105,8 +114,9 @@ function newGame() {
     document.getElementById('name-1').textContent = "Player 2";
     
     document.querySelector('.player-' + activePlayer + '-panel').classList.remove('winner');
-    document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.add('active');
     
     document.querySelector('.dice').style.display = 'none';
+    document.querySelector('.dice-2').style.display = 'none';
 }
