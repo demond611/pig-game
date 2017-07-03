@@ -9,7 +9,7 @@ GAME RULES:
 
 EXTRAS
 -Player loses entire score if they roll two 6's in a row
--Second dice added. If either/or dice is a 1 the all the ROUND score gets lost
+-Second dice added. If either/or dice is a 1 then all the ROUND score gets lost
 */
 
 var scores, roundScore, activePlayer, isGamePlaying, previousRoll, previousRoll_2;
