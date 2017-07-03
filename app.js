@@ -7,6 +7,9 @@ GAME RULES:
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLOBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
+EXTRAS
+-Player loses entire score if they roll two 6's in a row
+
 */
 
 var scores, roundScore, activePlayer, isGamePlaying;
@@ -15,20 +18,24 @@ newGame();
 
 document.querySelector('.btn-roll').addEventListener('click', function () {
     
-    if(isGamePlaying) {
-        var dice = Math.floor(Math.random() * 6) + 1,
-        diceDOM = document.querySelector('.dice');
+    if (isGamePlaying) {
+        var currentRoll = Math.floor(Math.random() * 6) + 1,
+            diceDOM = document.querySelector('.dice'),
+            previousRoll = [];
+        
+        previousRoll.push(currentRoll);
+        console.log(previousRoll);
 
         document.querySelector('.dice').style.display = 'block';
         diceDOM.style.display = 'block';
-        diceDOM.src = 'dice-' + dice + '.png';
+        diceDOM.src = 'dice-' + currentRoll + '.png';
 
-        if (dice !== 1) {
-            roundScore += dice;
+        if (currentRoll !== 1) {
+            roundScore += currentRoll;
             document.getElementById('current-' + activePlayer).textContent = roundScore;
         } else {
             nextPlayer();
-        }  
+        }
     }
     
 });
@@ -36,7 +43,7 @@ document.querySelector('.btn-roll').addEventListener('click', function () {
                                                      
 document.querySelector('.btn-hold').addEventListener('click', function () {
 
-    if(isGamePlaying) {
+    if (isGamePlaying) {
         scores[activePlayer] += roundScore;
     
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
@@ -46,14 +53,18 @@ document.querySelector('.btn-hold').addEventListener('click', function () {
             isGamePlaying = false;
         } else {
             nextPlayer();
-        } 
+        }
     }
 
 });
 
 document.querySelector('.btn-new').addEventListener('click', newGame);
 
+
+
 function nextPlayer() {
+    'use strict';
+    
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
     roundScore = 0;
     document.getElementById('current-' + activePlayer).textContent = '0';
@@ -67,14 +78,16 @@ function nextPlayer() {
 }
 
 function gameOver() {
+    'use strict';
+    
     document.getElementById('name-' + activePlayer).textContent = "WINNER!";
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
     document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-    //document.querySelector('.btn-roll').style.display = 'none';
-    //document.querySelector('.btn-hold').style.display = 'none';
 }
 
 function newGame() {
+    'use strict';
+    
     scores = [0, 0];
     roundScore = 0;
     activePlayer = 0;
@@ -93,6 +106,4 @@ function newGame() {
     document.querySelector('.player-1-panel').classList.remove('active');
     
     document.querySelector('.dice').style.display = 'none';
-    //document.querySelector('.btn-roll').style.display = 'block';
-    //document.querySelector('.btn-hold').style.display = 'block';
 }
